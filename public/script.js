@@ -1,5 +1,5 @@
 let socket = io()
-let messages = document.querySelector('section ul')
+let messages = document.querySelector('ul')
 let input = document.querySelector('input')
 
 document.querySelector('form').addEventListener('submit', event => {
