@@ -4,7 +4,7 @@
 
 
 ## Conceptualisation
-![alt text](https://github.com/JuulVrasdonk/real-time-web-moodboard/blob/main/assets/Conceptualisation.pdf)
+![alt text](https://github.com/JuulVrasdonk/real-time-web-moodboard/blob/main/assets/Conceptualisation.jpg)
 
 
 ## API Docs
