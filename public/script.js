@@ -7,6 +7,7 @@ const penBtn = document.querySelector('.pen');
 let imgPositionX = 143
 let imgPositionY = 154
 let data
+let lineData = []
 
 function setup() {
     createCanvas(710, 400);
@@ -17,6 +18,18 @@ function setup() {
         stroke(000);
         line(data.x , data.y , data.pX, data.pY);
     });
+
+    const rawDrawing = localStorage.getItem('drawing');
+    const savedLineData = JSON.parse(rawDrawing)
+
+    if(savedLineData){
+        savedLineData.forEach(point => {
+            lineData.push(point)
+            line(point.x, point.y, point.pX, point.pY)
+        })
+    }
+        
+    
 }
 
 function draw() {
@@ -30,10 +43,11 @@ function draw() {
     if(mouseIsPressed === true && penBtn.classList.contains('active')) {
         stroke(000);
         line(data.x , data.y , data.pX, data.pY);
+        lineData.push(data)
         socket.emit('mouse', data)
+        localStorage.setItem('drawing', JSON.stringify(lineData))
     }
 }
-
 
 
 penBtn.addEventListener('click', () => {
@@ -67,7 +81,7 @@ function mouseOverImages(scaledWidth, scaledHeight) {
 
     canvas.addEventListener('mousemove', (e) => {
         if(imgPositionX < data.x && surfaceX > data.x && imgPositionY < data.y && surfaceY > data.y) {
-            
+            console.log('mouse over');
         }
     })
 }
@@ -82,3 +96,9 @@ socket.on('image', (source) =>  {
         context.drawImage(img, imgPositionX, imgPositionY, img.width / 10, img.height / 10)
     }
 });
+
+let clearStorage = document.querySelector('.clear')
+clearStorage.addEventListener('click', () => {
+    window.localStorage.clear();
+    location.reload()
+})
