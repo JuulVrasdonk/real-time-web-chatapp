@@ -8,3 +8,29 @@ canvas {
   display: block;
   border: 1px solid black;
 }
+
+.imagefinder {
+  background-color: rgb(205, 205, 205);
+  position: absolute;
+  right: 15px;
+  bottom: 15px;
+  width: 30%;
+}
+
+.active {
+  background-color: red;
+}
+
+ul {
+  display: flex;
+  overflow-x: scroll;
+}
+
+li {
+  list-style-type: none;
+}
+img {
+  object-fit: contain;
+  width: 100px;
+  height: 100px;
+}

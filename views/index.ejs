@@ -9,7 +9,20 @@
 </head>
 <body>
     <h1>hello world</h1>
-
+    <div class="imagefinder">
+        <form method="get" data-search-form>
+            <input type="text" name="q" placeholder="zoek je inspiratie" data-search-input/>
+        </form>
+        <ul class="results">
+            <% results.forEach(result => { %>
+                <li>
+                    <img src="<%= result.urls.small %>" alt="<%= result.alt_description %>">
+                </li>
+            <% }) %>
+        </ul>
+    </div>
+    <button class="pen">Pen</button>
+    
     <script src="https://cdn.jsdelivr.net/npm/p5@1.4.1/lib/p5.js"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script src="./script.js"></script>
