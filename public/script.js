@@ -4,13 +4,19 @@ const results = document.querySelectorAll('.results li img')
 let source
 let context
 const penBtn = document.querySelector('.pen');
-let imgPositionX = 143
-let imgPositionY = 154
+let imgPositionX = 0
+let imgPositionY = 0
 let data
 let lineData = []
+let loadedImages = []
+let img
+var x;
+var y;
+
+
 
 function setup() {
-    createCanvas(710, 400);
+    createCanvas(window.innerWidth, window.innerHeight);
     background(230, 0);
     canvas = document.querySelector('canvas');
     context = canvas.getContext('2d');
@@ -18,6 +24,22 @@ function setup() {
         stroke(000);
         line(data.x , data.y , data.pX, data.pY);
     });
+
+    const rawImageData = localStorage.getItem('images');
+    const savedImageData = JSON.parse(rawImageData)
+    console.log(savedImageData);
+    if(savedImageData) {
+        savedImageData.forEach(image => {
+            const img = new Image();
+    
+            img.src = image
+    
+            let scaledWidth = img.width / 10
+            let scaledHeight = img.height / 10
+            context.drawImage(img, imgPositionX, imgPositionY, scaledWidth, scaledHeight)
+            mouseOverImages(scaledWidth, scaledHeight)
+        })
+    }
 
     const rawDrawing = localStorage.getItem('drawing');
     const savedLineData = JSON.parse(rawDrawing)
@@ -28,8 +50,6 @@ function setup() {
             line(point.x, point.y, point.pX, point.pY)
         })
     }
-        
-    
 }
 
 function draw() {
@@ -39,7 +59,7 @@ function draw() {
         pX: pmouseX,
         pY: pmouseY,
     }
-    
+
     if(mouseIsPressed === true && penBtn.classList.contains('active')) {
         stroke(000);
         line(data.x , data.y , data.pX, data.pY);
@@ -47,6 +67,7 @@ function draw() {
         socket.emit('mouse', data)
         localStorage.setItem('drawing', JSON.stringify(lineData))
     }
+    
 }
 
 
@@ -64,14 +85,23 @@ results.forEach(result => {
         const regularSize = source.slice(0, -3) + 1080
         const img = new Image();
         
-        img.src = regularSize
-        img.onload = () => {
-            let scaledWidth = img.width / 10
-            let scaledHeight = img.height / 10
-            context.drawImage(img, imgPositionX, imgPositionY, scaledWidth, scaledHeight)
-            socket.emit('image', source)
-            mouseOverImages(scaledWidth, scaledHeight)
-        }
+        // img.src = regularSize
+        loadedImages.push(regularSize)
+
+        localStorage.setItem('images', JSON.stringify(loadedImages));
+        loadedImages.forEach( image => {
+
+            img.src = image
+
+            img.onload = () => {
+                let scaledWidth = img.width / 10
+                let scaledHeight = img.height / 10
+                context.drawImage(img, imgPositionX, imgPositionY, scaledWidth, scaledHeight)
+                socket.emit('image', source)
+                mouseOverImages(scaledWidth, scaledHeight)
+            }
+        })
+        
     })
 })
 
