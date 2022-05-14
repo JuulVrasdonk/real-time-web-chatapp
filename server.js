@@ -7,7 +7,7 @@ const io = require('socket.io')(http)
 const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args))
 const apiKey = process.env.KEY
 
-const port = 2022
+const PORT = process.env.PORT || 2022
 
 app.set('view engine', 'ejs')
 app.set('views', './views')
@@ -50,6 +50,6 @@ io.on('connection', (socket) => {
 })
 
 
-http.listen(process.env.port, () => {
-  console.log('listening on port ', process.env.port)
+http.listen(PORT, () => {
+  console.log('listening on port ', PORT)
 })
